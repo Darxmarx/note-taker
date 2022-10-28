@@ -7,6 +7,9 @@ const api = require('./routes/index.js');
 // listens to port 3001 if the heroku port is not being used
 const PORT = process.env.PORT || 3001; 
 
+// initialize express usage
+const app = express();
+
 // middleware both parses json and urlencoded form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
