@@ -24,9 +24,31 @@ notes.post('/', (req, res) => {
         const newNote = {
             title,
             text,
-            id: uuidv4(),
+            id: uuidv4(), // function installed from uuid that randomly generates a string
         };
     }
 
-    
-})
+    // function that modifies the db.json file
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if(err) { // checks to see if response returns an error first
+            console.log(err); // logs the error
+        } else {
+            // takes data read from db.json, parses it, and appends the new note as a brand new object
+            const parsedDB = JSON.parse(data);
+            parsedDB.push(newNote);
+
+            //writes the modified data to the db.json file
+            fs.writeFile(
+                './db/db.json', // writes to the file
+                JSON.stringify(parsedDB, null, 2), // stringifies the parsed object back into JSON, null allows all properties of the object to be included in the string, and 2 represents the amount of spaces included for legibility in the new code
+                (err, data) => {
+                    if(err) { // checks error first
+                        console.log(err);
+                    } else {
+                        res.json(parsedDB);
+                        console.log ('Successfully added new tip.');
+                    }
+                });
+        }
+    });
+});
