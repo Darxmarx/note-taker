@@ -38,7 +38,7 @@ notes.post('/', (req, res) => {
                 let parsedDB = JSON.parse(data);
                 parsedDB.push(newNote);
 
-                //writes the modified data to the db.json file
+                // writes the modified data to the db.json file
                 fs.writeFile(
                     './db/db.json', // writes to the file
                     JSON.stringify(parsedDB, null, 2), // stringifies the parsed object back into JSON, null allows all properties of the object to be included in the string, and 2 represents the amount of spaces included for legibility in the new code
@@ -63,11 +63,29 @@ notes.delete('/:id', (req, res) => { // checks via specifically assigned id to n
             console.log(err); // logs the error
         } else {
             // reads data from db.json and parses it out
-            let parsedDB = JSON.parse(data); 
+            let parsedDB = JSON.parse(data);
 
+            // filters the data by removing all notes with a specific id
+            parsedDB = parsedDB.filter((event) => {
+                return event.id !== req.params.id;
+            });
+
+            // writes the modified data to the db.json file
+            fs.writeFile(
+                './db/db.json', // writes to the file
+                JSON.stringify(parsedDB, null, 2), // stringifies the parsed object back into JSON, null allows all properties of the object to be included in the string, and 2 represents the amount of spaces included for legibility in the new code
+                (err, data) => {
+                    if (err) { // checks error first
+                        console.log(err);
+                    } else {
+                        res.json(data);
+                        console.log('Successfully deleted tip.');
+                    }
+                });
         }
-    })
-})
+    });
+});
+
 
 // export this file's code for usage in the app
 module.exports = notes;
