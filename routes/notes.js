@@ -35,7 +35,7 @@ notes.post('/', (req, res) => {
                 console.log(err); // logs the error
             } else {
                 // takes data read from db.json, parses it, and appends the new note as a brand new object
-                const parsedDB = JSON.parse(data);
+                let parsedDB = JSON.parse(data);
                 parsedDB.push(newNote);
 
                 //writes the modified data to the db.json file
@@ -55,6 +55,19 @@ notes.post('/', (req, res) => {
         });
     }
 });
+
+// BONUS: DELETE route for specific note
+notes.delete('/:id', (req, res) => { // checks via specifically assigned id to note
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+        if (err) { // checks error first
+            console.log(err); // logs the error
+        } else {
+            // reads data from db.json and parses it out
+            let parsedDB = JSON.parse(data); 
+
+        }
+    })
+})
 
 // export this file's code for usage in the app
 module.exports = notes;
